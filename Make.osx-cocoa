@@ -11,7 +11,7 @@ GUI=cocoa
 LDADD=-ggdb -framework AppKit -framework OpenGL
 LDFLAGS=$(PTHREAD)
 TARG=drawterm
-AUDIO=none
+AUDIO=macosx
 
 all: default
 
