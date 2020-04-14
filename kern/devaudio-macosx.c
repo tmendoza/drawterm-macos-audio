@@ -16,7 +16,7 @@
 #define	THRESHOLD	0.005	
 #define NUM_CHANNELS  (2)
 #define SAMPLE_RATE   (44100)
-#define FRAMES_PER_BUFFER  (1024)
+#define FRAMES_PER_BUFFER  (2048)
 #define PA_SAMPLE_TYPE (paInt16)
 #define SAMPLE_SILENCE  (0)
 #define SAMPLE_SIZE (2)
