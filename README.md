@@ -56,6 +56,13 @@ I am thinking about creating an official build for macOS.  If anyone is interest
 ### Older macOS Version Support
 Maybe, but I am no expert Apple Developer so I imagine this will be a non-trivial exercise.  [Submit a Feature Request](https://github.com/tmendoza/drawterm-macos-audio/labels/enhancement) if this is desired.
 
+### Read Audio Support
+~~I don't think it would be too hard to add /dev/audio read support.  Would be nice to capture audio from the built in microphone or from a external mic plugged into a higher-end external audio interface like [the one I have](https://focusrite.com/en/usb-c-audio-interface/clarett-usb/clarett-8pre-usb).~~  **COMPLETED**
+
+This could lead to a rudimentary audio conferencing solution over [9P2000](https://en.wikipedia.org/wiki/9P_(protocol)).  If anyone is interested in this [let me know](https://github.com/tmendoza/drawterm-macos-audio/labels/enhancement).
+
+At the very least, /dev/audio read capabilities would allow me to continue my DSP work using [sample based synthesis](https://en.wikipedia.org/wiki/Sample-based_synthesis) on [9front](http://9front.org/).
+
 ## Examples
 
 ```bash
@@ -74,13 +81,6 @@ Maybe, but I am no expert Apple Developer so I imagine this will be a non-trivia
 % audio/mp3dec < /usr/glenda/recorded3.mp3 > /dev/audio
 
 ```
-
-### Read Audio Support
-~~I don't think it would be too hard to add /dev/audio read support.  Would be nice to capture audio from the built in microphone or from a external mic plugged into a higher-end external audio interface like [the one I have](https://focusrite.com/en/usb-c-audio-interface/clarett-usb/clarett-8pre-usb).~~  **COMPLETED**
-
-This could lead to a rudimentary audio conferencing solution over [9P2000](https://en.wikipedia.org/wiki/9P_(protocol)).  If anyone is interested in this [let me know](https://github.com/tmendoza/drawterm-macos-audio/labels/enhancement).
-
-At the very least, /dev/audio read capabilities would allow me to continue my DSP work using [sample based synthesis](https://en.wikipedia.org/wiki/Sample-based_synthesis) on [9front](http://9front.org/).
 
 ## Bugs
 This was a weekend hack so your mileage may vary.   If anyone tries this out and has issues let me know and I will try and resolve.   [Submit an Issue](https://github.com/tmendoza/drawterm-macos-audio/issues) for Boog fixes.
