@@ -56,6 +56,25 @@ I am thinking about creating an official build for macOS.  If anyone is interest
 ### Older macOS Version Support
 Maybe, but I am no expert Apple Developer so I imagine this will be a non-trivial exercise.  [Submit a Feature Request](https://github.com/tmendoza/drawterm-macos-audio/labels/enhancement) if this is desired.
 
+## Examples
+
+```bash
+# Play an Audio File directly to your Default CoreAudio device
+% audio/wavdec < piano.wav > /dev/audio
+
+# Capture audio from the builtin microphone of your Mac, convert to Ogg Vorbis then playback
+% cat /dev/audio > /usr/glenda/recorded.raw
+% audio/oggenc < /usr/glenda/recorded.raw > /usr/glenda/recorded.ogg
+% audio/oggdec < /usr/glenda/recorded.ogg > /dev/audio
+
+# Play multiple audio files thru mixfs (mixfs is a multiplexer for /dev/audio device)
+% audio/mixfs
+% audio/oggdec < /usr/glenda/recorded1.ogg > /dev/audio &
+% audio/wavdec < /usr/glenda/recorded2.wav > /dev/audio &
+% audio/mp3dec < /usr/glenda/recorded3.mp3 > /dev/audio
+
+```
+
 ### Read Audio Support
 ~~I don't think it would be too hard to add /dev/audio read support.  Would be nice to capture audio from the built in microphone or from a external mic plugged into a higher-end external audio interface like [the one I have](https://focusrite.com/en/usb-c-audio-interface/clarett-usb/clarett-8pre-usb).~~  **COMPLETED**
 
