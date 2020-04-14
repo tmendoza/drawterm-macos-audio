@@ -46,10 +46,10 @@ Already downloaded: /Users/tmendoza/Library/Caches/Homebrew/downloads/fcec114fb3
 
 Depending on your system, you might need need to update [Make.osx-cocoa](https://github.com/tmendoza/drawterm-macos-audio/blob/macos-audio/Make.osx-cocoa) with explicit references to the portaudio headers and libs.  Mine "Just Worked".  
 
-## EXTRA FEATURES
+## Extra Features
 I have added volume control thru /dev/volume.  Any 'audio source' commands written to /dev/volume will modify the master volume on the OS.  Apple doesn't seem to have an API for per-application volume control, so whatever you write to /dev/volume (1-100) changes the entire system volume for the machine.    Also, any changes made to the volume controls using standard OS tools or volume buttons on your laptop will be reflected when reading /dev/volume.
 
-## Todo
+## TODO
 ### Official Builds
 I am thinking about creating an official build for macOS.  If anyone is interested let me know and I can make it a priority.  [Submit a Feature Request](https://github.com/tmendoza/drawterm-macos-audio/labels/enhancement) for stuff you want.
 
