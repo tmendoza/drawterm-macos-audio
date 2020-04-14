@@ -16,17 +16,22 @@
 #define	THRESHOLD	0.005	
 #define NUM_CHANNELS  (2)
 #define SAMPLE_RATE   (44100)
-#define FRAMES_PER_BUFFER  (2048)
+#define FRAMES_PER_BUFFER  (1024)
 #define PA_SAMPLE_TYPE (paInt16)
 #define SAMPLE_SILENCE  (0)
 #define SAMPLE_SIZE (2)
 #define FRAME_SIZE (4)
 
-const PaDeviceInfo *deviceInfo;
+const PaDeviceInfo *outputDeviceInfo;
+const PaDeviceInfo *inputDeviceInfo;
 PaStreamParameters outputParameters;
+PaStreamParameters inputParameters;
 PaStream *stream;
 PaError err;
+PaDeviceIndex builtinMicID = -1;
+char *builtinMicName = "Built-in Microphone";
 uchar *outputBuffer = NULL;
+uchar *inputBuffer = NULL;
 int devcnt, i, numBytes;
 int leftvol, rightvol;
 int gain;
@@ -77,16 +82,36 @@ audiodevopen(void)
     if( devcnt < 0 )
 		oserror();
 
-    deviceInfo = Pa_GetDeviceInfo( Pa_GetDefaultInputDevice() );
+	/* Search for and find Built-In Microphone */
+    for(int i=0; i<devcnt; i++ )
+    {
+        inputDeviceInfo = Pa_GetDeviceInfo( i );
+        if (strcmp(builtinMicName, inputDeviceInfo->name) == 0) {
+            builtinMicID = i;
+        }
+    }
+
+    if (builtinMicID > -1) {
+        inputParameters.device = builtinMicID; /* default input device */
+    } else {
+        inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
+    }
+    inputParameters.channelCount = NUM_CHANNELS;
+    inputParameters.sampleFormat = PA_SAMPLE_TYPE;
+    inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultHighInputLatency ;
+    inputParameters.hostApiSpecificStreamInfo = NULL;
+
+    outputDeviceInfo = Pa_GetDeviceInfo( Pa_GetDefaultInputDevice() );
     outputParameters.device = Pa_GetDefaultOutputDevice(); /* default output device */
     outputParameters.channelCount = NUM_CHANNELS;
     outputParameters.sampleFormat = PA_SAMPLE_TYPE;
     outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultHighOutputLatency;
     outputParameters.hostApiSpecificStreamInfo = NULL;
+
     /* -- setup stream -- */
     err = Pa_OpenStream(
           &stream,
-          NULL,
+          &inputParameters,
           &outputParameters,
           SAMPLE_RATE,
           FRAMES_PER_BUFFER,
@@ -100,6 +125,9 @@ audiodevopen(void)
     numBytes = FRAMES_PER_BUFFER * NUM_CHANNELS * SAMPLE_SIZE ;
     outputBuffer = (uchar *) malloc(numBytes);
     memset( outputBuffer, SAMPLE_SILENCE, numBytes );
+
+	inputBuffer = (uchar *) malloc(numBytes);
+	memset( inputBuffer, SAMPLE_SILENCE, numBytes );
 
     /* -- start stream -- */
     err = Pa_StartStream( stream );
@@ -134,10 +162,18 @@ audiodevclose(void)
 }
 
 int
-audiodevread(void *a, int n)
+audiodevread(void *v, int n)
 {
-	error("no audio read support");
-	return -1;
+	int totalFrames;
+
+	totalFrames = n/FRAME_SIZE;
+
+	err = Pa_ReadStream( stream, v, totalFrames );
+	    
+	if( err != paNoError )
+		oserror();
+
+	return n;
 }
 
 int
